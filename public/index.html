@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link href="style.css" type="text/css" rel="stylesheet" />
+        <title>webrtcMinimal - datachannel</title>
+    </head>
+    <body>
+        <div>
+            <button onclick="start(false)">Listen</button>
+            <button onclick="start(true)">Offer</button>
+        </div>
+        <br>
+
+        <!-- SHADER SOURCES -->
+        <!-- VERTEX SHADER -->
+        <script id="vsSource" type="shader">
+            attribute vec4 a_Position;
+            uniform mat4 u_Transform;
+
+            void main(){
+                mat4 u_Transform2 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, u_Transform[0].y,0,0,1);
+
+                gl_Position = u_Transform*a_Position;
+                gl_PointSize = 10.0;
+            }
+        </script>
+        <!-- FRAGMENT SHADER -->
+        <script id="fsSource" type="shader">
+            precision mediump float;
+
+            void main(){
+                gl_FragColor = vec4(0,1,0,1);
+            }
+        </script>
+
+        <!-- DEPENDENICES -->
+        <script src="m4.js"></script>
+
+        <!-- MAIN SCRIPTS -->
+        <script src="webrtc.js"></script>
+        <script src="webgl.js"></script>
+    </body>
+</html>

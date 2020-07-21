@@ -1,0 +1,15 @@
+{
+  "name": "webrtcminimal",
+  "version": "1.0.0",
+  "description": "Minimal webrtc app using dtatachannel",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "Samuel Looi",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ws": "^7.3.1"
+  }
+}

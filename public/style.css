@@ -1,0 +1,9 @@
+canvas {
+    border: 1px solid black;
+    align-self:flex-start;
+}
+body{
+    display:flex;
+    flex-direction: column-reverse;
+    /* flex-grow: 0; */
+}
