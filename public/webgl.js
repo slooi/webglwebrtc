@@ -52,8 +52,8 @@ for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
 let data = [
 // X Y Z
     0,0,0,
-    0,30,0,
     30,0,0,
+    0,30,0,
 ]
 
 // BUFFER   !@#!@
@@ -81,13 +81,14 @@ render()
 
 // FUNCTIONS
 function setTransform(){
-    // let transform = m4.projection(canvas.width,canvas.height,canvas.width)
-    let transform = m4.identity()
-    transform = m4.scale(transform,2/300,2/300,1) // everything after this is affect by this   So this is applied at the very end???
+    let transform = m4.projection(canvas.width,canvas.height,canvas.width)
+    // let transform = m4.identity()
+    // transform = m4.scale(transform,2/300,2/300,1) // everything after this is affect by this   So this is applied at the very end???
     // transform = m4.scale(transform,2,2,1)
     // transform = m4.translate(transform,50,0,0)   // origin
     // transform = m4.rotateZ(transform,90)
     // transform = m4.rotateY(transform,0)
+    transform = m4.rotateX(transform,0)
     // transform = m4.translate(transform,50,0,0)   // translate
     console.log('transform',transform)
     gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)

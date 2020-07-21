@@ -52,6 +52,15 @@ const m4 = {
             0,0,0,1
         ]
     },
+    rotationX: function(deg){
+        const rad = Math.PI*deg/180
+        return [
+            1,0,0,0,//x basis vector
+            0,Math.cos(rad),Math.sin(rad),0,//y basis vector
+            0,-Math.sin(rad),Math.cos(rad),0,//z basis vector
+            0,0,0,1
+        ]
+    },
     multiply: function(a,b){
         const a00 = a[0*4 + 0]
         const a01 = a[0*4 + 1]
@@ -117,5 +126,8 @@ const m4 = {
     },
     rotateY: function(m,deg){
         return m4.multiply(m4.rotationY(deg),m)
+    },
+    rotateX: function(m,deg){
+        return m4.multiply(m4.rotationX(deg),m)
     }
 }
