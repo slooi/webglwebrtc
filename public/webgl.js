@@ -86,49 +86,55 @@ gl.vertexAttribPointer(
 gl.enableVertexAttribArray(attribLoc.a_Color)
 
 
-
-// uniform
-setTransform()
-
-// render
-render()
-
-
 // FUNCTIONS
 function clear(){
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
 
-function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz){
-    /*  Order:
-     - scale
-     - origin
-     - rotate
-     - translate
-    */
-    
-    let transform = m4.projection(canvas.width,canvas.height,canvas.width)
-    transform = m4.perspective(70,1,0.0001,99999)
-    transform = m4.translate(transform,tx||0,ty||0,tz||0)   // translate
-    transform = m4.rotateZ(transform,rz||0)
-    transform = m4.rotateY(transform,ry||0)
-    transform = m4.rotateX(transform,rx||0)    
-    transform = m4.translate(transform,ox||0,oy||0,oz||0) // Origin
-    transform = m4.scale(transform,sx||1,sy||1,sz||1)
-    
+function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz,ctx,cty,ctz,crx,cry,crz,csx,csy,csz){
+    // Perspective
+    let perspectiveM = m4.perspective(40,1,1,2000)
+
+    // Camera
+    let cameraM = m4.identity()
+    cameraM = m4.translate(cameraM,ctx,cty,ctz)
+    cameraM = m4.rotateX(cameraM,crx)
+    cameraM = m4.rotateY(cameraM,cry)
+    cameraM = m4.rotateZ(cameraM,crz)
+    cameraM = m4.inverse(cameraM)
+
+    // Model
+    let modelM = m4.identity()
+    modelM = m4.translate(modelM,tx||0,ty||0,tz||0)   // translate
+    modelM = m4.rotateZ(modelM,rz||0)
+    modelM = m4.rotateY(modelM,ry||0)
+    modelM = m4.rotateX(modelM,rx||0)    
+    modelM = m4.translate(modelM,ox||0,oy||0,oz||0) // Origin
+    modelM = m4.scale(modelM,sx||1,sy||1,sz||1)
+
+    // Overall Transform
+    let transform = m4.identity()
+    transform = m4.multiply(cameraM,perspectiveM)
+    transform = m4.multiply(modelM,transform)
+
+    // Upload transform to GPU
+    console.log(transform)
     gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
 }
 
 function render(){
+    // render using triangles and points
     gl.drawArrays(gl.TRIANGLES,0,position.length/3)
     gl.drawArrays(gl.POINTS,0,position.length/3)
 }
 
 function buildShader(type,source){
+    // build shader
     const shader = gl.createShader(type)
     gl.shaderSource(shader,source)
     gl.compileShader(shader)
     
+    // test
     if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
         throw new Error('ERROR: compiling shader. Info: '+gl.getShaderInfoLog(shader))
     }

@@ -10,11 +10,12 @@ origin
 
 // Initialise variables
 const trArray = document.getElementById('controls').children[0].children
+const numOfSliders = 21
 
 // START
 attachListeners()
 setAllSliderValues()
-
+changeOccured()
 
 
 // ############
@@ -27,7 +28,7 @@ function setAllSliderValues(){
     // TRANSLATE
     setPair(0,0) // 0
     setPair(1,0) // 1
-    setPair(2,0) // 2
+    setPair(2,300) // 2
     // ROTATE
     setPair(3,0) // 3
     setPair(4,0) // 4
@@ -40,6 +41,19 @@ function setAllSliderValues(){
     setPair(9,0) // 9
     setPair(10,0) // 10
     setPair(11,0) // 11
+
+    // CAMERA
+    setPair(12,0) // 11
+    setPair(13,0) // 11
+    setPair(14,0) // 11
+
+    setPair(15,0) // 11
+    setPair(16,0) // 11
+    setPair(17,0) // 11
+
+    setPair(18,1) // 11
+    setPair(19,1) // 11
+    setPair(20,1) // 11
 }
 function setPair(i,val){
     // sets the slider value & sets its corresponding display value
@@ -47,7 +61,7 @@ function setPair(i,val){
     setDisplayVal(i,val)
 }
 function setSlider(i,val){
-    getSlider.value = val
+    getSlider(i).value = val
 }
 function setDisplayVal(i,val){
     trArray[i].children[2].innerText = val
@@ -56,7 +70,7 @@ function setDisplayVal(i,val){
 // GET
 function getAllSliderVals(){
     const values = []
-    for(let i=0;i<12;i++){
+    for(let i=0;i<numOfSliders;i++){
         values.push(Number(getSlider(i).value))
     }
     return values
@@ -67,8 +81,9 @@ function getSlider(i){
 
 // EVENTLISTENERS
 function attachListeners(){
-    for(let i=0;i<12;i++){
+    for(let i=0;i<numOfSliders;i++){
         getSlider(i).addEventListener('input',e=>{
+            console.log('input')
             setDisplayVal(i,e.target.value)
             changeOccured()
         })

@@ -8,12 +8,12 @@
     </head>
     <body>
         <div id="main-content">
+            <div style="width:300px;height:300px;border:1px solid #00000000" id="canvas-placeholder"></div>
+            <br>
             <div>
                 <button onclick="start(false)">Listen</button>
                 <button onclick="start(true)">Offer</button>
             </div>
-            <br>
-            <div style="width:300px;height:300px;border:1px solid #00000000" id="canvas-placeholder"></div>
         </div>
 
         <!-- SHADER SOURCES -->
@@ -31,7 +31,6 @@
                 mat4 u_Transform2 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, u_Transform[0].y,0,0,1);
 
                 gl_Position = u_Transform*a_Position;
-                gl_Position.w = gl_Position.z*2.0+1.0;
                 gl_PointSize = 10.0;
             }
         </script>
@@ -120,6 +119,52 @@
                 <tr>
                     <td class="label">OriginZ:</td>
                     <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera TranslateX:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera TranslateY:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera TranslateZ:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td class="label">Camera RotateX:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera RotateY:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera RotateZ:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera ScaleX:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera ScaleY:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Camera ScaleZ:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
                     <td></td>
                 </tr>
             </tbody>
