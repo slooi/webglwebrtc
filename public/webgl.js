@@ -1,5 +1,9 @@
 console.log('loaded webgl.js')
 
+// Elements
+const mainContent = document.getElementById('main-content')
+const placeholder = document.getElementById('canvas-placeholder')
+
 // Source
 const vsSource = document.getElementById('vsSource').innerText
 const fsSource = document.getElementById('fsSource').innerText
@@ -10,7 +14,7 @@ const canvas = document.createElement('canvas')
 // const canvas = document.getElementById('canvas')
 canvas.width = 300
 canvas.height = 300
-document.body.append(canvas)
+mainContent.replaceChild(canvas,placeholder)
 
 // gl
 let gl = canvas.getContext('webgl')
@@ -23,8 +27,8 @@ if(!gl){
 
 // gl init
 gl.viewport(0,0,canvas.width,canvas.height)
-gl.clearColor(1,0,0,1)
-gl.clear(gl.COLOR_BUFFER_BIT)
+gl.clearColor(0.2,0.2,0.23,1)
+gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 gl.enable(gl.CULL_FACE)
 gl.enable(gl.DEPTH_TEST)
@@ -49,19 +53,13 @@ for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){
 }
 
 // data
-let data = [
-// X Y Z
-    0,0,0,
-    30,0,0,
-    0,30,0,
-]
 
 // BUFFER   !@#!@
-const dataBuffer = gl.createBuffer()
-gl.bindBuffer(gl.ARRAY_BUFFER,dataBuffer)
-gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(data),gl.STATIC_DRAW)
+// Position
+const positionBuffer = gl.createBuffer()
+gl.bindBuffer(gl.ARRAY_BUFFER,positionBuffer)
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(position),gl.STATIC_DRAW)
 
-// attribute
 gl.vertexAttribPointer(
     attribLoc.a_Position,
     3,
@@ -72,6 +70,23 @@ gl.vertexAttribPointer(
 )
 gl.enableVertexAttribArray(attribLoc.a_Position)
 
+// Color
+const colorBuffer = gl.createBuffer()
+gl.bindBuffer(gl.ARRAY_BUFFER,colorBuffer)
+gl.bufferData(gl.ARRAY_BUFFER,new Uint8Array(color),gl.STATIC_DRAW)
+
+gl.vertexAttribPointer(
+    attribLoc.a_Color,
+    4,
+    gl.UNSIGNED_BYTE,
+    1,
+    0,
+    0
+)
+gl.enableVertexAttribArray(attribLoc.a_Color)
+
+
+
 // uniform
 setTransform()
 
@@ -80,23 +95,33 @@ render()
 
 
 // FUNCTIONS
-function setTransform(){
+function clear(){
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+}
+
+function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz){
+    /*  Order:
+     - scale
+     - origin
+     - rotate
+     - translate
+    */
+    
     let transform = m4.projection(canvas.width,canvas.height,canvas.width)
-    // let transform = m4.identity()
-    // transform = m4.scale(transform,2/300,2/300,1) // everything after this is affect by this   So this is applied at the very end???
-    // transform = m4.scale(transform,2,2,1)
-    // transform = m4.translate(transform,50,0,0)   // origin
-    // transform = m4.rotateZ(transform,90)
-    // transform = m4.rotateY(transform,0)
-    transform = m4.rotateX(transform,0)
-    // transform = m4.translate(transform,50,0,0)   // translate
-    console.log('transform',transform)
+    transform = m4.perspective(70,1,0.0001,99999)
+    transform = m4.translate(transform,tx||0,ty||0,tz||0)   // translate
+    transform = m4.rotateZ(transform,rz||0)
+    transform = m4.rotateY(transform,ry||0)
+    transform = m4.rotateX(transform,rx||0)    
+    transform = m4.translate(transform,ox||0,oy||0,oz||0) // Origin
+    transform = m4.scale(transform,sx||1,sy||1,sz||1)
+    
     gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
 }
 
 function render(){
-    gl.drawArrays(gl.TRIANGLES,0,data.length/3)
-    gl.drawArrays(gl.POINTS,0,data.length/3)
+    gl.drawArrays(gl.TRIANGLES,0,position.length/3)
+    gl.drawArrays(gl.POINTS,0,position.length/3)
 }
 
 function buildShader(type,source){
@@ -127,3 +152,31 @@ function buildProgram(){
     }
     return program
 }
+
+
+
+
+/* 
+Two players both using the saved mesh.
++ Ground
+
+How am i going to move them independently?
+
+methods:
+1) create two copies of anime mesh. and move each vertex depending on position of player <= CPU intensive
+2) onlly have one anime mesh. Multiple draw calls. One uniform, its value just change twice?
+
+
+2) 
+draw player one
+
+function drawFrame(){
+    // player 1 YOU DON'T ACTUALLY DRAW THE PLAYER, just need to use player1 info to offest everything else 
+    setTransform()
+    // player 2
+    setTransoform2()
+    render()
+}
+
+
+*/

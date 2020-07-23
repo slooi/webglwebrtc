@@ -18,6 +18,17 @@ const m4 = {
             0,0,0,1
         ]
     },
+    perspective: function(degrees,aspect,zNear,zFar){
+        const fov = degrees/180*Math.PI
+        const invDis = 1/(zFar-zNear)
+        const t = Math.tan((Math.PI-fov)*0.5)
+        return [
+            t/aspect,0,0,0,
+            0,t,0,0,
+            0,0,-1+2*zNear*zFar*invDis/zNear,1,
+            0,0,-2*zNear*zFar*invDis,0,
+        ]
+    },
     scaling: function(sx,sy){
         return [
             sx,0,0,0,

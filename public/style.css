@@ -2,8 +2,23 @@ canvas {
     border: 1px solid black;
     align-self:flex-start;
 }
-body{
+#main-content{
     display:flex;
     flex-direction: column-reverse;
-    /* flex-grow: 0; */
+}
+body{
+    display:grid;
+    grid-template-columns: 300px 1fr;
+    /* flex-te */
+    justify-items: left;
+    gap:1rem;
+}
+
+/* CONTROLS */
+.controls{
+    align-self: flex-start;
+    /* : left; */
+}
+.label{
+    text-align: right;
 }

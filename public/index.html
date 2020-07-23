@@ -7,22 +7,31 @@
         <title>webrtcMinimal - datachannel</title>
     </head>
     <body>
-        <div>
-            <button onclick="start(false)">Listen</button>
-            <button onclick="start(true)">Offer</button>
+        <div id="main-content">
+            <div>
+                <button onclick="start(false)">Listen</button>
+                <button onclick="start(true)">Offer</button>
+            </div>
+            <br>
+            <div style="width:300px;height:300px;border:1px solid #00000000" id="canvas-placeholder"></div>
         </div>
-        <br>
 
         <!-- SHADER SOURCES -->
         <!-- VERTEX SHADER -->
         <script id="vsSource" type="shader">
             attribute vec4 a_Position;
+            attribute vec4 a_Color;
+
+            varying vec4 v_Color;
+
             uniform mat4 u_Transform;
 
             void main(){
+                v_Color = a_Color;
                 mat4 u_Transform2 = mat4(1,0,0,0, 0,1,0,0, 0,0,1,0, u_Transform[0].y,0,0,1);
 
                 gl_Position = u_Transform*a_Position;
+                gl_Position.w = gl_Position.z*2.0+1.0;
                 gl_PointSize = 10.0;
             }
         </script>
@@ -30,16 +39,90 @@
         <script id="fsSource" type="shader">
             precision mediump float;
 
+            varying vec4 v_Color;
+
             void main(){
-                gl_FragColor = vec4(0,1,0,1);
+                gl_FragColor = v_Color;
             }
         </script>
 
         <!-- DEPENDENICES -->
         <script src="m4.js"></script>
 
+        <!-- DATA -->
+        <script src="position.js"></script>
+        <script src="color.js"></script>
+
         <!-- MAIN SCRIPTS -->
         <script src="webrtc.js"></script>
         <script src="webgl.js"></script>
+        
+        <script src="main.js" defer></script>
+
+
+        <table id="controls">
+            <tbody>
+                <tr>
+                    <td class="label">TranslateX:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">TranslateY:</td>
+                    <td><input type="range" step="1"  min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">TranslateZ:</td>
+                    <td><input type="range" step="1"  min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">RotateX:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">RotateY:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">RotateZ:</td>
+                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">ScaleX:</td>
+                    <td><input type="range" step="0.1" min="-5" max="5" value="1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">ScaleY:</td>
+                    <td><input type="range" step="0.1" min="-5" max="5" value="1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">ScaleZ:</td>
+                    <td><input type="range" step="0.1" min="-5" max="5" value="1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">OriginX:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">OriginY:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">OriginZ:</td>
+                    <td><input type="range" step="1" min="-300" max="300" value="0"></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>    
     </body>
 </html>
