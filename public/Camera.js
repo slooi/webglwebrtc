@@ -19,9 +19,9 @@ class Camera {
             this.x = this.player.x
             this.y = this.player.y
             this.z = this.player.z
-            this.rx = this.player.rX
-            this.ry = this.player.rY
-            this.rz = this.player.rZ
+            this.rx = this.player.rx
+            this.ry = this.player.ry
+            this.rz = this.player.rz
         }else{
             this.x = x
             this.y = y
@@ -32,12 +32,12 @@ class Camera {
         }
 
         // setTransformPlayers()
-        setTransform(null,null,null, null,null,null, null,null,null, null,null,null, this.x,this.y,this.z,this.rx,this.ry,this.rz,null)
+        // setTransform(null,null,null, null,null,null, null,null,null, null,null,null, this.x,this.y,this.z,this.rx,this.ry,this.rz,null)
     }
     setPlayer(player){
         this.player = player
     }
     getOrientation(){
-        return createTransformMatrix(this.x,this.y,this.z,this.rx,this.ry,this.rz,1)
+        return createTransformMatrix(this.x,this.y,this.z,this.rx,this.ry,1)
     }
 }

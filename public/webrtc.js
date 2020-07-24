@@ -105,7 +105,7 @@ async function createSesDescription(isOfferer){
 
 function setupDataChannel(e){
     dataChannel.onmessage = function(e){
-        console.log('SUCCESS onmessage e:',e)
+        // console.log('SUCCESS onmessage e:',e)
         const data = JSON.parse(e.data)
         console.log('JSON.parse:',data)
         dataChannel.data = data
@@ -113,7 +113,9 @@ function setupDataChannel(e){
     console.log('setupDataChannel e',e)
 
     dataChannel.strSend = function(data){
-        dataChannel.send(JSON.stringify(data))
+        if(dataChannel.readyState === "open"){
+            dataChannel.send(JSON.stringify(data))
+        }
     }
 
     

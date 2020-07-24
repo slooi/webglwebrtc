@@ -4,9 +4,9 @@ class Player {
         this.x = x
         this.y = y
         this.z = z
-        this.rX = rx
-        this.rY = ry
-        this.rZ = rz
+        this.rx = rx
+        this.ry = ry
+        this.rz = rz
         this.speed = 5
 
         this.inputs = inputs
@@ -17,9 +17,9 @@ class Player {
         if(this.isLocalPlayer){
             // Exists
 
-            const radX = this.rX/180*Math.PI
-            const radY = this.rY/180*Math.PI
-            const radZ = this.rZ/180*Math.PI
+            const radX = this.rx/180*Math.PI
+            const radY = this.ry/180*Math.PI
+            const radZ = this.rz/180*Math.PI
 
             if(this.inputs.keyPressed.KeyW){
                 // Controlled by y Axis
@@ -48,18 +48,30 @@ class Player {
                 this.y += this.speed                
             }
 
-            this.rX += this.inputs.mouse.movementY
-            this.rY += this.inputs.mouse.movementX
+            this.rx += this.inputs.mouse.movementY
+            this.ry += this.inputs.mouse.movementX
         }else{
-            // Does not exist. Use p2p data
-            console.log(this.inputs)
-            try{
-                if(this.inputs !== undefined && this.inputs.data !== undefined){
-                    console.log(this.inputs.data)
-                }
-            }catch{
-
+            if(this.inputs !== undefined && this.inputs.data !== undefined){
+                const [x,y,z,rx,ry] = this.inputs.data
+                
+                this.x = x
+                this.y = y
+                this.z = z
+                this.rx = rx
+                this.ry = ry
             }
+            // throw new Error('ERROR')
+            // Does not exist. Use p2p data
+            // console.log('this.inputs p2p:',this.inputs)
+            // // throw new Error('ERROR',e)
+            // try{
+            //     if(this.inputs !== undefined && this.inputs.data !== undefined){
+            //         console.log(this.inputs.data)
+            //         console.warn('pie')
+            //     }
+            // }catch (e){
+            //     throw new Error('ERROR',e)
+            // }
         }
     }
 
@@ -68,7 +80,11 @@ class Player {
     }
 
     getOrientation(){
-        return createTransformMatrix(this.x,this.y,this.z,this.rX,this.rY,this.rZ,0)
+        return createTransformMatrix(this.x,this.y,this.z,this.rx,this.ry,0)
+    }
+
+    info(){
+        return [this.x,this.y,this.z,this.rx,this.ry]
     }
 
 }

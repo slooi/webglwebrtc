@@ -132,22 +132,42 @@ function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz,ctx,cty,ctz,crx,cry,cr
 
 function setTransformPlayers(remotePlayerM,localPlayerM){
     // Perspective
-    let perspectiveM = m4.perspective(80,1,1,2000)
+    // let perspectiveM = m4.perspective(80,1,1,2000)
 
-    // View
-    const viewM = localPlayerM
+    // // View
+    // const viewM = localPlayerM
 
-    // Model
-    const modelM = remotePlayerM
+    // // Model
+    // const modelM = remotePlayerM
 
-    console.log('remotePlayerM,localPlayerM',remotePlayerM,localPlayerM)
+    // console.log('remotePlayerM,localPlayerM',remotePlayerM,localPlayerM)
 
-    // Overall Transform
-    let transform = m4.identity()
-    transform = m4.multiply(viewM,perspectiveM)
-    transform = m4.multiply(modelM,transform)
+    // // Overall Transform
+    // let transform = m4.identity()
+    // transform = m4.multiply(viewM,perspectiveM)
+    // transform = m4.multiply(modelM,transform)
 
-    gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
+    // gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
+
+    /* asdasd */
+
+      // Perspective
+      let perspectiveM = m4.perspective(80,1,1,2000)
+
+      // Camera
+      let cameraM = localPlayerM
+        
+      // Model
+      let modelM = remotePlayerM
+  
+      // Overall Transform
+      let transform = m4.identity()
+      transform = m4.multiply(cameraM,perspectiveM)
+      transform = m4.multiply(modelM,transform)
+  
+      // Upload transform to GPU
+      // console.log(transform)
+      gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
 }
 
 function createTransformMatrix(tx,ty,tz,rx,ry,doInverse){
