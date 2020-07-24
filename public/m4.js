@@ -29,11 +29,11 @@ let m4 = {
             0,0,-2*zNear*zFar*invDis,0,
         ]
     },
-    scaling: function(sx,sy){
+    scaling: function(sx,sy,sz){
         return [
             sx,0,0,0,
             0,sy,0,0,
-            0,0,1,0,
+            0,0,sz,0,
             0,0,0,1
         ]
     },

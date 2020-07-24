@@ -91,17 +91,25 @@ function clear(){
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 }
 
-function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz,ctx,cty,ctz,crx,cry,crz,csx,csy,csz){
+function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz,ctx,cty,ctz,crx,cry,crz,playerCamM){
     // Perspective
-    let perspectiveM = m4.perspective(40,1,1,2000)
+    let perspectiveM = m4.perspective(80,1,1,2000)
 
     // Camera
-    let cameraM = m4.identity()
-    cameraM = m4.translate(cameraM,ctx,cty,ctz)
-    cameraM = m4.rotateX(cameraM,crx)
-    cameraM = m4.rotateY(cameraM,cry)
-    cameraM = m4.rotateZ(cameraM,crz)
-    cameraM = m4.inverse(cameraM)
+    let cameraM
+    if(playerCamM){
+        // If playerCamM exists
+        // console.log('#1')
+        cameraM = playerCamM
+    }else{
+        // console.log('ctx,cty,ctz,crx,cry,crz',ctx,cty,ctz,crx,cry,crz)
+        cameraM = m4.identity()
+        cameraM = m4.translate(cameraM,ctx,cty,ctz)
+        cameraM = m4.rotateY(cameraM,cry)
+        cameraM = m4.rotateX(cameraM,crx)
+        // cameraM = m4.rotateZ(cameraM,crz)
+        cameraM = m4.inverse(cameraM)
+    }
 
     // Model
     let modelM = m4.identity()
@@ -118,8 +126,40 @@ function setTransform(tx,ty,tz,rx,ry,rz,sx,sy,sz,ox,oy,oz,ctx,cty,ctz,crx,cry,cr
     transform = m4.multiply(modelM,transform)
 
     // Upload transform to GPU
-    console.log(transform)
+    // console.log(transform)
     gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
+}
+
+function setTransformPlayers(remotePlayerM,localPlayerM){
+    // Perspective
+    let perspectiveM = m4.perspective(80,1,1,2000)
+
+    // View
+    const viewM = localPlayerM
+
+    // Model
+    const modelM = remotePlayerM
+
+    console.log('remotePlayerM,localPlayerM',remotePlayerM,localPlayerM)
+
+    // Overall Transform
+    let transform = m4.identity()
+    transform = m4.multiply(viewM,perspectiveM)
+    transform = m4.multiply(modelM,transform)
+
+    gl.uniformMatrix4fv(uniformLoc.u_Transform,false,transform)
+}
+
+function createTransformMatrix(tx,ty,tz,rx,ry,doInverse){
+    let viewM = m4.identity()
+    viewM = m4.translate(viewM,tx,ty,tz)
+    viewM = m4.rotateY(viewM,ry)
+    viewM = m4.rotateX(viewM,rx)
+    if(doInverse){
+        viewM = m4.inverse(viewM)
+    }
+
+    return viewM
 }
 
 function render(){

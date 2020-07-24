@@ -10,6 +10,7 @@ ws.strSend = function(data){
 let pc // peer connection
 let signallingChannel // We will send the ice candidates and sdp packets using this channel to the server to relay them to remote client 
 let dataChannel // this the p2p data channel connecting the two clients
+
 const pcConfig = {
     iceServers:[
         {urls: 'stun:stun.stunprotocol.org:3478'},
@@ -41,9 +42,12 @@ function start(isOfferer){
         pc.addEventListener('datachannel',e=>{
             console.log('CLIENT HAS RECEIVE CALLBACK FROM DATACHANNEL')
             dataChannel = e.channel
+
             setupDataChannel()
         })
     }
+
+    
 }
 
 
@@ -102,9 +106,23 @@ async function createSesDescription(isOfferer){
 function setupDataChannel(e){
     dataChannel.onmessage = function(e){
         console.log('SUCCESS onmessage e:',e)
+        const data = JSON.parse(e.data)
+        console.log('JSON.parse:',data)
+        dataChannel.data = data
     }
     console.log('setupDataChannel e',e)
+
+    dataChannel.strSend = function(data){
+        dataChannel.send(JSON.stringify(data))
+    }
+
+    
+    // !@#!@#!@#!@#!@#!@#!@#!@#!@#  PUT SOMEWHERE ELSE and refactor IN FUTURE 
+    game.players[1].attachInputs(dataChannel)
 }
+
+
+
 
 // TRY USING PUBLIC STUN SERVERS
 

@@ -12,7 +12,7 @@
             <br>
             <div>
                 <button onclick="start(false)">Listen</button>
-                <button onclick="start(true)">Offer</button>
+                <button onclick="start(true);">Offer</button>
             </div>
         </div>
 
@@ -52,10 +52,20 @@
         <script src="position.js"></script>
         <script src="color.js"></script>
 
-        <!-- MAIN SCRIPTS -->
+        <!-- MODULE -->
         <script src="webrtc.js"></script>
         <script src="webgl.js"></script>
         
+        <!-- CLASSES -->
+        <script src="Player.js"></script>
+        <script src="Game.js"></script>
+        <script src="Camera.js"></script>
+        <script src="inputHandler.js"></script>
+
+        <!-- UI SCRIPT -->
+        <script src="controls.js" defer></script>   <!-- Needs to load AFTER controls table -->
+
+        <!-- MAIN SCRIPT -->
         <script src="main.js" defer></script>
 
 
@@ -149,21 +159,6 @@
                 </tr>
                 <tr>
                     <td class="label">Camera RotateZ:</td>
-                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="label">Camera ScaleX:</td>
-                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="label">Camera ScaleY:</td>
-                    <td><input type="range" step="1" min="-360" max="360" value="0"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="label">Camera ScaleZ:</td>
                     <td><input type="range" step="1" min="-360" max="360" value="0"></td>
                     <td></td>
                 </tr>
